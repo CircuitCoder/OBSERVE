@@ -1,0 +1,198 @@
+\documentclass{ctexart}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{thmtools}
+\usepackage{nameref}
+\usepackage{hyperref}
+\usepackage{xurl}
+
+\theoremstyle{definition}
+\newtheorem{definition}{定义}[section]
+\newtheorem{lemma}{引理}[section]
+\newtheorem{theorem}{定理}[section]
+\newtheorem{proposition}{命题}[section]
+\newtheorem{axiom}{公理}[section]
+
+\title{OBSERVE Chapter 1}
+\author{喵喵}
+\date{2020.9}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\section{关于“无穷集合”的定义}
+
+\subsection{定义与引理}
+
+方便起见，我们称 $0 = \emptyset$。
+
+\begin{definition}[后继]
+对于集合 $x$，称集合 x 的\textbf{后继} $succ(x) = x \cup \{ x \}$
+\end{definition}
+
+\begin{lemma}[后继的存在性]
+  $\forall x: \exists y: y = succ(x)$
+\end{lemma}
+
+\begin{proof}
+  喵喵有点懒没有仔细看，用 Axiom of Foundation + Axiom of Extensionality。TODO
+\end{proof}
+
+\begin{definition}[自然数]\label{nn}
+  称 $x$ 是自然数(Natural number) $\iff x = 0 \lor \exists y: y \text{是 \nameref{nn}} \land x = succ(y)$
+\end{definition}
+
+我们可以据此定义自然数之间的加法。根据 Axiom of regularity, 不存在自然数 x 和 y，使得 $y \neq 0 \land x + y = x$。这样根据后继定义的自然数不会打环。这样我们对于所有的自然数（现在还不一定是个集合）有了一个全序。
+
+{
+  \small
+  这里其实有个洞：在存在无穷集合之前，我们能不能使用归纳定义呢？或者说这里这个定义并不涉及无穷次逻辑，所以其实没关系？\footnote{See: \url{https://math.stackexchange.com/questions/490825/prove-the-principle-of-mathematical-induction-in-sf-zfc}}
+}
+
+\vspace{3em}
+
+根据自然数，我们可以定义有限集合和无穷集合。
+
+\begin{definition}[有限集合]\label{finite}
+我们称集合 $A$ 是\textbf{有限集合} $\iff \exists x: x \text{是 \nameref{nn}} \land A \sim x$
+\end{definition}
+
+\begin{definition}[无穷集合]\label{infinite}
+我们称集合 $A$ 是\textbf{无穷集合} 当且仅当 $A$ 不是有限集合。
+\end{definition}
+
+\vspace{3em}
+
+\begin{definition}[归纳集]\label{inductive}
+我们称集合 $I$ 是\textbf{归纳集}(Inductive set) $\iff 0 \in I \land (\forall x \in I: succ(x) \in I)$
+\end{definition}
+
+据此定义我们可以陈述无穷公理(Axiom of Infinity)：
+
+\begin{axiom}[无穷公理]\label{aoi}
+  $\exists I: I \text{是 \nameref{inductive}}$
+\end{axiom}
+
+我们暂时\textbf{不接受}无穷公理，而是希望证明这一公理和以下两个命题等价：
+
+\begin{proposition}\label{pp1}
+  $\exists A: A \text{是 \nameref{infinite}}$
+\end{proposition}
+
+\begin{proposition}[Dedekind-infinite]\label{pp2}
+  $\exists A: \exists B: B \subsetneqq A \land A \sim B$
+\end{proposition}
+
+下证 \nameref{aoi} $\iff \text{命题 \ref{pp1}} \iff \text{命题 \ref{pp2}}$。
+
+\vspace{3em}
+
+在证明的过程中我们接受 ZFC 公理系统中所有除了无穷公理以外的公理，包括选择公理。
+
+\begin{lemma}\label{lemma:cap-inductive}
+  如果 A, B 均为 \nameref{inductive}，那么 $A \cap B$ 也是 \nameref{inductive}。
+\end{lemma}
+
+\begin{proof}
+  显然。TODO
+\end{proof}
+
+\begin{lemma}
+  \nameref{aoi} $\iff$ 存在自然数集 $\mathbb{N}$。
+\end{lemma}
+
+\begin{proof}
+  由于 $\mathbb{N}$ 显然是 \nameref{inductive}，所以 ($\implies$) 是不言自明的。下证 ($\impliedby$)
+
+  根据 \nameref{aoi}，假设存在集合 $I$ 是 \nameref{inductive}。
+
+  一个简单的证明方法是，根据 \nameref{inductive} 的定义，$I$ 包含所有的 \nameref{nn}。直接应用谓词"是 \nameref{nn}" 于\textbf{分离公理模式}(Axiom schema of specification)，可以得到 $\mathbb{N} \subseteqq I$ 的存在性。
+\end{proof}
+
+自 \url{http://web.mat.bham.ac.uk/R.W.Kaye/logic/infinity.html} 的证明更加复杂，但是感觉避开了一些奇怪的味道？
+
+\begin{proof}
+  令 $P = \{S \subseteq I: S \text{是 \nameref{inductive}}\}$。根据\textbf{幂集公理}(Axiom of power set)，并应用谓词"是 \nameref{inductive}" 于\textbf{分离公理模式}(Axiom schema of specification)，可以得到 $P$ 的存在性。
+
+  令 $\omega = \bigcap P$。根据引理 \ref{lemma:cap-inductive}，$\mathbb{N}$ 是 \nameref{inductive}。
+
+  现在我们构造出了一个\textbf{最小}的\nameref{inductive}。同样地，由于 $\omega$ 一定包含所有的自然数，因此它只包含所有的自然数。因此 $\mathbb{N} = \omega$。
+\end{proof}
+
+\subsection{三者等价性证明}
+
+先来个引理。
+
+\begin{lemma}\label{nat-ord}
+  任意自然数比自身的任意真子集的势都要大。正式地：对于任意自然数 x，令谓词 $Nat(x)$ 表示“$x$ 是自然数”:
+
+  $$
+  \forall y: y \subsetneqq x \rightarrow (\exists z: Nat(z) \land z < x \land y \sim z)
+  $$
+\end{lemma}
+
+\begin{proof}
+  归纳
+
+  初始条件：$0 = \emptyset$ 不存在真子集，因此这一命题对 0 显然成立。
+
+  归纳假设：如果自然数 $x$ 满足上述条件，下证 $succ(x)$ 也满足这一条件。
+
+  根据自然数定义，$succ(x) = x \cup \{x\}$。此时，对于任意 $succ(x)$ 的真子集 $s$：
+
+  如果 $x \notin s$，那么 $s \subsetneqq x$ 根据归纳假设，$\exists z: Nat(z) \land z < x \land s \sim z$，此时也一定有 $z < succ(x)$
+
+  如果 $x \in s$，那么令 $s_0 = s \setminus \{ x \}$，此时 $s_0 \subsetneqq x$。根据归纳假设，$exists z: Nat(z) \land z < x \land s_0 \sim z$，也就是存在双射 $f_0: s_0 \mapsto z$。
+
+  构造一个新的双射：$f: s \mapsto succ(z)$
+
+  $$
+    f(n) = \begin{cases}
+      f_0(n) & n \neq x \\
+      succ(z) & n = x
+    \end{cases}
+  $$
+
+  因此 $s \sim succ(z)$，而根据 $z < x$，一定有 $succ(z) < succ(x)$。
+\end{proof}
+
+\begin{theorem}
+  \nameref{aoi} $\implies$ 命题 \ref{pp2}
+\end{theorem}
+
+\begin{proof}
+  直接构造：$succ: \mathbb{N} \mapsto \mathbb{N} \setminus \{0\}$
+\end{proof}
+
+\begin{theorem}
+  命题 \ref{pp2} $\implies$ 命题 \ref{pp1}
+\end{theorem}
+
+\begin{proof}
+  考虑命题 \ref{pp2} 中的集合 A。我们可以通过反证法证明 A 就是我们要找的无穷集合。
+
+  如果 A 是有限集合，那么存在自然数 $x$（在这里，我们不能使用 $\mathbb{N}$）以及双射 $f_1: x \mapsto A$。
+
+  根据命题 \ref{pp2}，存在 $B \subsetneqq A$，存在双射 $f_2: A \mapsto B$。
+
+  考虑映射 $g = f_1^{-1} \circ f_2 \circ f_1$。$g(x) \subsetneqq x$。这是一个自然数到自身真子集的双射。根据引理 \ref{nat-ord}，这样的双射一定不存在。矛盾。
+\end{proof}
+
+\begin{theorem}
+  命题 \ref{pp1} $\implies$ \nameref{aoi}
+\end{theorem}
+
+\begin{proof}
+  令 A 是无穷集合。在接受 AC 的条件下，使用良序定理，可以得到 A 的一个序。
+
+  非正式地，不断取出 A 中的最小元素，我们可以构造出 A 到自然数的一个映射。由于不存在和 A 等势的自然数，因此我们可以得到一个归纳证明，也就是不断得这样取下去。
+
+  将这个映射应用于 \textbf{置换公理模式}(Axiom schema of replacement)，我们可以得到一个 $\mathbb{N}$ 的构造。而 $\mathbb{N}$ 是一个 \nameref{inductive}。
+\end{proof}
+
+\end{document}
