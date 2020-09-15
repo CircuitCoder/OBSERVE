@@ -109,9 +109,9 @@
 \end{lemma}
 
 \begin{proof}
-  由于 $\mathbb{N}$ 显然是 \nameref{inductive}，所以 ($\implies$) 是不言自明的。下证 ($\impliedby$)
+  由于 $\mathbb{N}$ 显然是 \nameref{inductive}，所以 ($\impliedby$) 是不言自明的。下证 ($\implies$)
 
-  根据 \nameref{aoi}，假设存在集合 $I$ 是 \nameref{inductive}。
+  根据 \nameref{aoi}，令 $I$ 是 \nameref{inductive}。
 
   一个简单的证明方法是，根据 \nameref{inductive} 的定义，$I$ 包含所有的 \nameref{nn}。直接应用谓词"是 \nameref{nn}" 于\textbf{分离公理模式}(Axiom schema of specification)，可以得到 $\mathbb{N} \subseteqq I$ 的存在性。
 \end{proof}
@@ -194,7 +194,7 @@
 
   非正式地，不断取出 A 中的最小元素，我们可以构造出 A 到自然数的一个映射。由于不存在和 A 等势的自然数，因此我们可以得到一个归纳证明，也就是不断得这样取下去。
 
-  将这个映射应用于 \textbf{置换公理模式}(Axiom schema of replacement)，我们可以得到一个 $\mathbb{N}$ 的构造。而 $\mathbb{N}$ 是一个 \nameref{inductive}。
+  将这个映射应用于 \textbf{置换公理模式}(Axiom schema of replacement)，我们可以得到一个包含所有自然数的集合的构造。而根据定义这一集合是一个 \nameref{inductive}。
 \end{proof}
 
 \end{document}
